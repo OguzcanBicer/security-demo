@@ -15,7 +15,6 @@ import static com.oguzcan.securitydemo.model.enums.Permission.*;
 public enum Role {
 
     USER(Collections.emptySet()),
-
     ADMIN(
             Set.of(
                     ADMIN_READ,
@@ -24,23 +23,12 @@ public enum Role {
                     ADMIN_CREATE
             )
     ),
-
-
     TEACHER(
             Set.of(
                     TEACHER_READ,
                     TEACHER_UPDATE,
                     TEACHER_DELETE,
                     TEACHER_CREATE
-            )
-    ),
-
-    STUDENT(
-            Set.of(
-                    STUDENT_READ,
-                    STUDENT_UPDATE,
-                    STUDENT_DELETE,
-                    STUDENT_CREATE
             )
     )
 
@@ -56,6 +44,4 @@ public enum Role {
                 .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
-    }
-
-}
+    }}

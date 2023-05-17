@@ -3,7 +3,7 @@ package com.oguzcan.securitydemo.dto.response;
 import lombok.Builder;
 
 @Builder
-public record AuthenticationResponseDTO(
+public record AuthenticationResponse(
         String accessToken,
         String refreshToken
 ) {

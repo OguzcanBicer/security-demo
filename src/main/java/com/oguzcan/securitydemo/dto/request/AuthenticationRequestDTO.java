@@ -1,6 +1,9 @@
 package com.oguzcan.securitydemo.dto.request;
 
-public record UserLoginRequestDTO(
+import lombok.Builder;
+
+@Builder
+public record AuthenticationRequestDTO(
         String username,
         String password
 ) {

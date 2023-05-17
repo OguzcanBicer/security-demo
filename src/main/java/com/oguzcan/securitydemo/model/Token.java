@@ -1,5 +1,6 @@
 package com.oguzcan.securitydemo.model;
 
+import com.oguzcan.securitydemo.model.enums.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,10 +18,13 @@ public class Token {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID tokenId;
+    public UUID id;
 
     @Column(unique = true)
-    private String token;
+    public String token;
+
+    @Enumerated(EnumType.STRING)
+    public TokenType tokenType = TokenType.BEARER;
 
     public boolean revoked;
 
