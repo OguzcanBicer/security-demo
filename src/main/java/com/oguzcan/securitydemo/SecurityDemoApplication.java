@@ -25,6 +25,8 @@ public class SecurityDemoApplication {
             var admin = UserRegisterRequestDTO.builder()
                     .username("admin")
                     .password("admin")
+                    .firstname("oguzcan")
+                    .lastname("oguz")
                     .role(ADMIN)
                     .build();
             System.out.println("Admin token: " + service.register(admin).accessToken());
@@ -32,9 +34,11 @@ public class SecurityDemoApplication {
             var teacher = UserRegisterRequestDTO.builder()
                     .username("teacher")
                     .password("teacher")
+                    .firstname("tea")
+                    .lastname("cher")
                     .role(TEACHER)
                     .build();
-            System.out.println("Manager token: " + service.register(teacher).accessToken());
+            System.out.println("Teacher token: " + service.register(teacher).accessToken());
         };
     }
 }

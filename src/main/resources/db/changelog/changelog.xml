@@ -1,13 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="7" author="Oguzcan"  labels="RENAME COLUMN" context="Token / User">
-        <renameColumn tableName="token" oldColumnName="tokenId" newColumnName="token_id" />
-        <renameColumn tableName="_user" oldColumnName="userId" newColumnName="user_id" />
-    </changeSet>
+<!--    <changeSet id="1" author="oguzcan">-->
+<!--        <createTable tableName="course">-->
+<!--            <column name="id" type="bigint" autoIncrement="true">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="title" type="varchar(255)"/>-->
+<!--            <column name="teacher_id" type="bigint"/>-->
+<!--            <column name="classroom" type="varchar(255)"/>-->
+<!--            <column name="is_active" type="boolean"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="2" author="oguzcan">-->
+<!--        <createTable tableName="enroll">-->
+<!--            <column name="id" type="bigint" autoIncrement="true">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="student_id" type="bigint"/>-->
+<!--            <column name="course_id" type="bigint"/>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="3" author="oguzcan">-->
+<!--        <createTable tableName="token">-->
+<!--            <column name="id" type="uuid">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="token" type="varchar(255)">-->
+<!--                <constraints unique="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="token_type" type="varchar(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="revoked" type="boolean"/>-->
+<!--            <column name="expired" type="boolean"/>-->
+<!--            <column name="user_id" type="bigint">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="4" author="oguzcan">-->
+<!--        <createTable tableName="_user">-->
+<!--            <column name="id" type="bigint" autoIncrement="true">-->
+<!--                <constraints primaryKey="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="username" type="varchar(255)">-->
+<!--                <constraints unique="true" nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="password" type="varchar(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--            <column name="firstname" type="varchar(255)"/>-->
+<!--            <column name="lastname" type="varchar(255)"/>-->
+<!--            <column name="role" type="varchar(255)">-->
+<!--                <constraints nullable="false"/>-->
+<!--            </column>-->
+<!--        </createTable>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="5" author="oguzcan">-->
+<!--        <addForeignKeyConstraint baseTableName="token"-->
+<!--                                 baseColumnNames="user_id"-->
+<!--                                 constraintName="fk_token_user"-->
+<!--                                 referencedTableName="_user"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 onDelete="CASCADE"/>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="6" author="oguzcan">-->
+<!--        <addForeignKeyConstraint baseTableName="enroll"-->
+<!--                                 baseColumnNames="student_id"-->
+<!--                                 constraintName="fk_enroll_student"-->
+<!--                                 referencedTableName="_user"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 onDelete="CASCADE"/>-->
+<!--    </changeSet>-->
+
+<!--    <changeSet id="7" author="oguzcan">-->
+<!--        <addForeignKeyConstraint baseTableName="enroll"-->
+<!--                                 baseColumnNames="course_id"-->
+<!--                                 constraintName="fk_enroll_course"-->
+<!--                                 referencedTableName="course"-->
+<!--                                 referencedColumnNames="id"-->
+<!--                                 onDelete="CASCADE"/>-->
+<!--    </changeSet>-->
 
 </databaseChangeLog>

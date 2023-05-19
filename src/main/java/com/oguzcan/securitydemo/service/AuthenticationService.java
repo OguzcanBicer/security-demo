@@ -2,9 +2,9 @@ package com.oguzcan.securitydemo.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oguzcan.securitydemo.dto.request.AuthenticationRequestDTO;
+import com.oguzcan.securitydemo.dto.request.UserLoginRequestDTO;
 import com.oguzcan.securitydemo.dto.request.UserRegisterRequestDTO;
-import com.oguzcan.securitydemo.dto.response.AuthenticationResponse;
+import com.oguzcan.securitydemo.dto.response.UserTokenResponseDTO;
 import com.oguzcan.securitydemo.model.Token;
 import com.oguzcan.securitydemo.model.User;
 import com.oguzcan.securitydemo.model.enums.TokenType;
@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,23 +33,25 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse register(UserRegisterRequestDTO request) {
+  public UserTokenResponseDTO register(UserRegisterRequestDTO request) {
     var user = User.builder()
         .username(request.username())
         .password(passwordEncoder.encode(request.password()))
+            .firstname(request.firstname())
+            .lastname(request.lastname())
         .role(request.role())
         .build();
     var savedUser = repository.save(user);
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
-    return AuthenticationResponse.builder()
+    return UserTokenResponseDTO.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
   }
 
-  public AuthenticationResponse authenticate(AuthenticationRequestDTO request) {
+  public UserTokenResponseDTO authenticate(UserLoginRequestDTO request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.username(),
@@ -59,7 +64,7 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder()
+    return UserTokenResponseDTO.builder()
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
         .build();
@@ -106,7 +111,7 @@ public class AuthenticationService {
         var accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
+        var authResponse = UserTokenResponseDTO.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

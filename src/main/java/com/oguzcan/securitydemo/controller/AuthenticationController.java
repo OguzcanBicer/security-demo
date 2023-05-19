@@ -1,8 +1,8 @@
 package com.oguzcan.securitydemo.controller;
 
-import com.oguzcan.securitydemo.dto.request.AuthenticationRequestDTO;
+import com.oguzcan.securitydemo.dto.request.UserLoginRequestDTO;
 import com.oguzcan.securitydemo.dto.request.UserRegisterRequestDTO;
-import com.oguzcan.securitydemo.dto.response.AuthenticationResponse;
+import com.oguzcan.securitydemo.dto.response.UserTokenResponseDTO;
 import com.oguzcan.securitydemo.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,14 +23,14 @@ public class AuthenticationController {
   private final AuthenticationService service;
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
+  public ResponseEntity<UserTokenResponseDTO> register(
       @RequestBody UserRegisterRequestDTO request
   ) {
     return ResponseEntity.ok(service.register(request));
   }
   @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
-      @RequestBody AuthenticationRequestDTO request
+  public ResponseEntity<UserTokenResponseDTO> authenticate(
+      @RequestBody UserLoginRequestDTO request
   ) {
     return ResponseEntity.ok(service.authenticate(request));
   }

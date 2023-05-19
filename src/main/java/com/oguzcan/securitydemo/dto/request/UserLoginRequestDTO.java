@@ -3,7 +3,7 @@ package com.oguzcan.securitydemo.dto.request;
 import lombok.Builder;
 
 @Builder
-public record AuthenticationRequestDTO(
+public record UserLoginRequestDTO(
         String username,
         String password
 ) {
