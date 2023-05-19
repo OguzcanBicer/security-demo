@@ -16,8 +16,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
 import static com.oguzcan.securitydemo.model.enums.Permission.*;
-import static com.oguzcan.securitydemo.model.enums.Role.ADMIN;
-import static com.oguzcan.securitydemo.model.enums.Role.TEACHER;
+import static com.oguzcan.securitydemo.model.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -52,14 +51,18 @@ public class SecurityConfiguration {
           .permitAll()
 
 
-        .requestMatchers("/api/v1/teacher/**").hasAnyRole(ADMIN.name(), TEACHER.name())
+        .requestMatchers("/api/v1/course/**").hasAnyRole(TEACHER.name())
+        .requestMatchers("/api/v1/enroll/**").hasAnyRole(STUDENT.name())
+        .requestMatchers("/api/v1/auth/**").permitAll()
+        .requestMatchers(GET, "/api/**").hasAnyRole(USER.name(), TEACHER.name(), STUDENT.name(), ADMIN.name())
+        .requestMatchers("/api/**").hasAnyRole(ADMIN.name())
+
 
 
         .requestMatchers(GET, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_READ.name(), TEACHER_READ.name())
         .requestMatchers(POST, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_CREATE.name(), TEACHER_CREATE.name())
         .requestMatchers(PUT, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_UPDATE.name(), TEACHER_UPDATE.name())
         .requestMatchers(DELETE, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_DELETE.name(), TEACHER_DELETE.name())
-
 
        /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
 

@@ -30,7 +30,16 @@ public enum Role {
                     TEACHER_DELETE,
                     TEACHER_CREATE
             )
-    )
+    ),
+    STUDENT(
+            Set.of(
+                    STUDENT_READ,
+                    STUDENT_UPDATE,
+                    STUDENT_DELETE,
+                    STUDENT_CREATE
+            )
+    ),
+
 
     ;
 

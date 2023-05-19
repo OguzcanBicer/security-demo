@@ -3,6 +3,7 @@ package com.oguzcan.securitydemo.model;
 import com.oguzcan.securitydemo.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,12 +11,12 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User implements UserDetails {
+public class User extends DateAudit implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
