@@ -6,10 +6,9 @@ import com.oguzcan.securitydemo.service.EnrollService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,12 +19,23 @@ public class EnrollController {
 
     @PostMapping
     public ResponseEntity<Enroll> enrollStudent(StudentEnrollRequestDTO request) {
-        return ResponseEntity.ok(enrollService.enrollCourse(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(enrollService.enrollCourse(request));
     }
 
     @DeleteMapping
     public ResponseEntity<Void> unEnrollStudent(StudentEnrollRequestDTO request) {
         enrollService.unEnrollCourse(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Enroll>> getAllEnrolls() {
+        return ResponseEntity.ok(enrollService.getAllEnrolls());
+    }
+
+    @GetMapping
+    public ResponseEntity<Enroll> getEnroll(Long enrollId) {
+        return ResponseEntity.ok(enrollService.getEnroll(enrollId));
     }
 }

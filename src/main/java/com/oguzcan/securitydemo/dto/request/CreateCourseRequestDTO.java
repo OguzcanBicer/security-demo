@@ -3,8 +3,9 @@ package com.oguzcan.securitydemo.dto.request;
 import lombok.Builder;
 
 @Builder
-public record CreateCourseRequestDTO (
+public record CreateCourseRequestDTO(
         String title,
-        String classroom
+        String classroom,
+        Long teacherId
 ) {
 }

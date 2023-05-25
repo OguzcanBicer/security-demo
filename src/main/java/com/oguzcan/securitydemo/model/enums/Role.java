@@ -20,7 +20,15 @@ public enum Role {
                     ADMIN_READ,
                     ADMIN_UPDATE,
                     ADMIN_DELETE,
-                    ADMIN_CREATE
+                    ADMIN_CREATE,
+                    STUDENT_READ,
+                    STUDENT_UPDATE,
+                    STUDENT_DELETE,
+                    STUDENT_CREATE,
+                    TEACHER_READ,
+                    TEACHER_UPDATE,
+                    TEACHER_DELETE,
+                    TEACHER_CREATE
             )
     ),
     TEACHER(
@@ -53,4 +61,5 @@ public enum Role {
                 .collect(Collectors.toList());
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
-    }}
+    }
+}

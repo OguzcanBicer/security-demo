@@ -1,11 +1,12 @@
 package com.oguzcan.securitydemo;
 
+import com.oguzcan.securitydemo.dto.request.CreateCourseRequestDTO;
+import com.oguzcan.securitydemo.dto.request.StudentEnrollRequestDTO;
 import com.oguzcan.securitydemo.dto.request.UserRegisterRequestDTO;
-import com.oguzcan.securitydemo.model.Course;
-import com.oguzcan.securitydemo.model.Enroll;
-import com.oguzcan.securitydemo.repository.CourseRepository;
-import com.oguzcan.securitydemo.repository.EnrollRepository;
+import com.oguzcan.securitydemo.mapper.UserMapper;
 import com.oguzcan.securitydemo.service.AuthenticationService;
+import com.oguzcan.securitydemo.service.CourseService;
+import com.oguzcan.securitydemo.service.EnrollService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,10 +24,12 @@ public class SecurityDemoApplication {
     @Bean
     public CommandLineRunner commandLineRunner(
             AuthenticationService authService,
-            CourseRepository courseRepository,
-            EnrollRepository enrollRepository
+            CourseService courseService,
+            EnrollService enrollService,
+            UserMapper userMapper
     ) {
         return args -> {
+            // 1L
             var admin = UserRegisterRequestDTO.builder()
                     .username("admin")
                     .password("admin")
@@ -36,6 +39,7 @@ public class SecurityDemoApplication {
                     .build();
             System.out.println("Admin token: " + authService.register(admin).accessToken());
 
+            // 2L
             var teacher = UserRegisterRequestDTO.builder()
                     .username("teacher")
                     .password("teacher")
@@ -45,6 +49,7 @@ public class SecurityDemoApplication {
                     .build();
             System.out.println("Teacher token: " + authService.register(teacher).accessToken());
 
+            // 3L
             var student = UserRegisterRequestDTO.builder()
                     .username("student")
                     .password("student")
@@ -54,6 +59,7 @@ public class SecurityDemoApplication {
                     .build();
             System.out.println("Student token: " + authService.register(student).accessToken());
 
+            // 4L
             var user = UserRegisterRequestDTO.builder()
                     .username("user")
                     .password("user")
@@ -63,22 +69,29 @@ public class SecurityDemoApplication {
                     .build();
             System.out.println("User token: " + authService.register(user).accessToken());
 
-            var course1 = Course.builder()
+            // 1L
+            var course = CreateCourseRequestDTO.builder()
                     .title("Math")
+                    .classroom("3/C")
                     .teacherId(2L)
                     .build();
-            var course2 = Course.builder()
-                    .title("History")
-                    .teacherId(2L)
-                    .build();
-            courseRepository.save(course1);
-            courseRepository.save(course2);
+            courseService.createCourse(course);
 
-            var enroll = Enroll.builder()
+            // 2L
+            var course2 = CreateCourseRequestDTO.builder()
+                    .title("History")
+                    .classroom("History A")
+                    .teacherId(2L)
+                    .build();
+            courseService.createCourse(course2);
+
+
+            // 1L
+            var enroll = StudentEnrollRequestDTO.builder()
                     .courseId(1L)
                     .studentId(3L)
                     .build();
-            enrollRepository.save(enroll);
+            enrollService.enrollCourse(enroll);
         };
     }
 }

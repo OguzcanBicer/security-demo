@@ -2,7 +2,6 @@ package com.oguzcan.securitydemo.repository;
 
 import com.oguzcan.securitydemo.model.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,5 +18,5 @@ public interface TokenRepository extends JpaRepository<Token, UUID> {
 
     List<Token> findAllByUser_IdAndExpiredIsFalseOrRevokedIsFalse(long userId);
 
-  Optional<Token> findByToken(String token);
+    Optional<Token> findByToken(String token);
 }

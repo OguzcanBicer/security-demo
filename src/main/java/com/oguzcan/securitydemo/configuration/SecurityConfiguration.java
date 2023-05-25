@@ -14,8 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-
-import static com.oguzcan.securitydemo.model.enums.Permission.*;
 import static com.oguzcan.securitydemo.model.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
@@ -25,67 +23,76 @@ import static org.springframework.http.HttpMethod.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-  private final JwtAuthenticationFilter jwtAuthFilter;
-  private final AuthenticationProvider authenticationProvider;
-  private final LogoutHandler logoutHandler;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    private final LogoutHandler logoutHandler;
+    private final CustomAuthenticationEntryPoint authEntryPoint;
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf()
-        .disable()
-        .authorizeHttpRequests()
-        .requestMatchers(
-                "/api/v1/auth/**",
-                "/v2/api-docs",
-                "/v3/api-docs",
-                "/v3/api-docs/**",
-                "/swagger-resources",
-                "/swagger-resources/**",
-                "/configuration/ui",
-                "/configuration/security",
-                "/swagger-ui/**",
-                "/webjars/**",
-                "/swagger-ui.html"
-        )
-          .permitAll()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        "/api/v1/auth/**",
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/swagger-ui.html"
+                )
+                .permitAll()
 
+                .requestMatchers(GET, "/api/v1/**").permitAll()
 
-        .requestMatchers("/api/v1/course/**").hasAnyRole(TEACHER.name())
-        .requestMatchers("/api/v1/enroll/**").hasAnyRole(STUDENT.name())
-        .requestMatchers("/api/v1/auth/**").permitAll()
-        .requestMatchers(GET, "/api/**").hasAnyRole(USER.name(), TEACHER.name(), STUDENT.name(), ADMIN.name())
-        .requestMatchers("/api/**").hasAnyRole(ADMIN.name())
-
-
-
-        .requestMatchers(GET, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_READ.name(), TEACHER_READ.name())
-        .requestMatchers(POST, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_CREATE.name(), TEACHER_CREATE.name())
-        .requestMatchers(PUT, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_UPDATE.name(), TEACHER_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/teacher/**").hasAnyAuthority(ADMIN_DELETE.name(), TEACHER_DELETE.name())
-
-       /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
-
-        .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-        .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-        .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
+                .requestMatchers("/api/v1/course/**").hasAnyRole(TEACHER.name(), ADMIN.name())
+//                .requestMatchers("/api/v1/course/**").hasAnyAuthority("ROLE_STUDENT")
+//                .requestMatchers("/api/v1/course/**").hasAnyAuthority(TEACHER_UPDATE.getPermission(), TEACHER_CREATE.getPermission(), TEACHER_DELETE.getPermission(), TEACHER_READ.getPermission())
+                .requestMatchers(POST, "/api/v1/enroll/**").hasAnyRole(STUDENT.name(), ADMIN.name())
+                .requestMatchers(PUT, "/api/v1/enroll/**").hasAnyRole(STUDENT.name(), ADMIN.name())
+                .requestMatchers(DELETE, "/api/v1/enroll/**").hasAnyRole(STUDENT.name(), ADMIN.name())
 
 
-        .anyRequest()
-          .authenticated()
-        .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .logout()
-        .logoutUrl("/api/v1/auth/logout")
-        .addLogoutHandler(logoutHandler)
-        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-    ;
+                .requestMatchers("/api/**").hasRole(ADMIN.name())
 
-    return http.build();
-  }
+
+                /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
+
+                 .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
+                 .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
+                 .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
+                 .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
+
+
+                .anyRequest()
+                .authenticated()
+
+                .and()
+
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint)
+
+                .and()
+
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/api/v1/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+        ;
+
+        return http.build();
+    }
 }

@@ -23,7 +23,12 @@ public abstract class DateAudit implements Serializable {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
 
+    @Column(updatable = false)
+    private String createdBy = "System";
+
     @UpdateTimestamp
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime updatedAt;
+
+    private String updatedBy;
 }
